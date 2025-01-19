@@ -6,6 +6,7 @@ import ListItem from "../components/ListItem";
 import EditForm from "../components/editForm";
 import useModal from "../hooks/useModal";
 import dataStore from "../store/dataStore";
+import { IItem } from "../types";
 
 const MainPage = observer(() => {
   const {
@@ -27,7 +28,14 @@ const MainPage = observer(() => {
     incrementPage,
     pageNumber,
     deleteElement,
+    editElement,
+    isEditingError,
   } = dataStore;
+
+  const onSubmit = (data: IItem) => {
+    editElement(data);
+    handleOk();
+  };
 
   useEffect(() => {
     getPageAction();
@@ -80,10 +88,10 @@ const MainPage = observer(() => {
 
   return (
     <div>
-      <div style={{ position: "sticky", top: "0px", zIndex: 1000 }}>
+      {/* <div style={{ position: "sticky", top: "0px", zIndex: 1000 }}>
         {pageNumber}
       </div>
-      Бесконечный скролл
+      Бесконечный скролл */}
       {content}
       {isLoading && <Spin indicator={<LoadingOutlined spin />} />}
       <Modal
@@ -93,7 +101,7 @@ const MainPage = observer(() => {
         onOk={handleOk}
       >
         {/* {JSON.stringify(currElement)} */}
-        <EditForm />
+        <EditForm currElement={currElement} submit={onSubmit} />
       </Modal>
     </div>
   );

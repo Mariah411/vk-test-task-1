@@ -9,6 +9,7 @@ class DataStore {
   error: ErrType = {} as ErrType;
   hasNextPage: boolean = false;
   pageNumber: number = 1;
+  isEditingError = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -34,6 +35,9 @@ class DataStore {
     this.error = value;
   };
 
+  setIsEditingError = (value: boolean) => {
+    this.isEditingError = value;
+  };
   setPageNumber = (value: number) => {
     this.pageNumber = value;
   };
@@ -68,7 +72,26 @@ class DataStore {
   };
 
   deleteElement = (id: number) => {
-    this.setResults(this.results.filter((value) => value.id !== id));
+    try {
+      this.setResults(this.results.filter((value) => value.id !== id));
+      this.setIsEditingError(false);
+    } catch (e) {
+      this.setIsEditingError(true);
+    }
+  };
+
+  editElement = (data: IItem) => {
+    const index = this.results.findIndex((value) => value.id === data.id);
+    if (index !== undefined) {
+      try {
+        const newResult = [...this.results];
+        newResult[index] = { ...data };
+        this.setResults(newResult);
+        this.setIsEditingError(false);
+      } catch (e) {
+        this.setIsEditingError(true);
+      }
+    } else this.setIsEditingError(true);
   };
 
   incrementPage = () => {

@@ -5,6 +5,6 @@ export const api = axios.create({
 });
 
 export const getPage = async (pageNumber = 1, options = {}) => {
-  const response = await api.get(`/posts?_page= ${pageNumber}`, options);
+  const response = await api.get(`/posts?_page=${pageNumber}`, options);
   return response.data;
 };

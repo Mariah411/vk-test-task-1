@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { IItem } from "../types";
 
 const useModal = (onOk?: any) => {
-  const [currElement, setCurrElement] = useState<any>({} as any);
+  const [currElement, setCurrElement] = useState<IItem>({} as IItem);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -9,22 +10,23 @@ const useModal = (onOk?: any) => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (item) => {
+  const handleEdit = (item: IItem) => {
     showModal();
     setCurrElement(item);
+    console.log(currElement);
   };
 
   const handleOk = () => {
-    console.log(currElement.id);
     setIsModalOpen(false);
-    setCurrElement({});
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    // setCurrElement({});
   };
   const handleClose = () => {
     setIsModalOpen(false);
+    // setCurrElement({});
   };
 
   return {

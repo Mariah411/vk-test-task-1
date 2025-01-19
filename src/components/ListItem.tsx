@@ -16,7 +16,7 @@ const ListItem = forwardRef((props: Props, ref: React.ForwardedRef<any>) => {
       <p>{item.body}</p>
       <p>item id: {item.id}</p>
       <button onClick={() => deleteElement(item.id)}>Удалить</button>
-      <button onClick={() => handleEdit(item)}>Редактировать</button>
+      <button onClick={() => handleEdit({ ...item })}>Редактировать</button>
     </Card>
     // <>
     //   <h2>{item.title}</h2>

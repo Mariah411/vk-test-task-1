@@ -1,28 +1,44 @@
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { IItem } from "../types";
 
-const EditForm = () => {
-  type Inputs = {
-    example: string;
-    exampleRequired: string;
-  };
+type Inputs = {
+  id: number;
+  userId: number;
+  title: string;
+  body: string;
+};
+
+type Props = {
+  currElement: IItem;
+  submit: any;
+};
+
+const EditForm = (props: Props) => {
+  const { currElement, submit } = props;
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  } = useForm<Inputs>({ defaultValues: {} as Inputs });
+  const onSubmit: SubmitHandler<Inputs> = (data) => submit(data);
+
+  useEffect(() => {
+    reset(currElement);
+  }, [currElement, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* register your input into the hook by invoking the "register" function */}
-      <input defaultValue="test" {...register("example")} />
+      <input {...register("id")} disabled />
 
-      {/* include validation with required or other standard HTML validation rules */}
-      <input {...register("exampleRequired", { required: true })} />
-      {/* errors will return when field validation fails  */}
-      {errors.exampleRequired && <span>This field is required</span>}
+      <input {...register("userId", { required: true })} />
+
+      <input {...register("title")} />
+      <input {...register("body")} />
+      {/* {errors.userId && <span>This field is required</span>} */}
 
       <input type="submit" />
     </form>
