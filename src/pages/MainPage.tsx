@@ -1,32 +1,21 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Modal, Spin } from "antd";
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import ListItem from "../components/ListItem";
+import EditForm from "../components/editForm";
+import useModal from "../hooks/useModal";
 import dataStore from "../store/dataStore";
 
 const MainPage = observer(() => {
-  // const { count, increment, decrement } = counterStore;
-  // const [pageNumber, setPageNumber] = useState(1);
-
-  const [currElement, setCurrElement] = useState<any>({} as any);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  const handleClose = () => {
-    setIsModalOpen(false);
-  };
+  const {
+    currElement,
+    isModalOpen,
+    handleEdit,
+    handleOk,
+    handleClose,
+    handleCancel,
+  } = useModal();
 
   const {
     results,
@@ -39,11 +28,6 @@ const MainPage = observer(() => {
     pageNumber,
     deleteElement,
   } = dataStore;
-
-  // useEffect(() => {
-  //   incrementPage();
-  // }, []);
-  // useEffect(() => incrementPage());
 
   useEffect(() => {
     getPageAction();
@@ -76,7 +60,7 @@ const MainPage = observer(() => {
       return (
         <ListItem
           deleteElement={deleteElement}
-          handleOpenModal={showModal}
+          handleEdit={handleEdit}
           key={item.id}
           ref={lastItemRef}
           item={item}
@@ -86,7 +70,7 @@ const MainPage = observer(() => {
       return (
         <ListItem
           deleteElement={deleteElement}
-          handleOpenModal={showModal}
+          handleEdit={handleEdit}
           key={item.id}
           item={item}
         />
@@ -99,10 +83,6 @@ const MainPage = observer(() => {
       <div style={{ position: "sticky", top: "0px", zIndex: 1000 }}>
         {pageNumber}
       </div>
-      <button onClick={() => incrementPage()}>-</button>
-      {/* <button onClick={() => decrement(1)}>-</button>
-      <span>{count}</span>
-      <button onClick={() => increment(1)}>+</button> */}
       Бесконечный скролл
       {content}
       {isLoading && <Spin indicator={<LoadingOutlined spin />} />}
@@ -110,7 +90,11 @@ const MainPage = observer(() => {
         open={isModalOpen}
         onClose={handleClose}
         onCancel={handleCancel}
-      ></Modal>
+        onOk={handleOk}
+      >
+        {/* {JSON.stringify(currElement)} */}
+        <EditForm />
+      </Modal>
     </div>
   );
 });
