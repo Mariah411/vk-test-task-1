@@ -1,12 +1,53 @@
-import { useCallback, useRef, useState } from "react";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Modal, Spin } from "antd";
+import { observer } from "mobx-react-lite";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ListItem from "../components/ListItem";
-import useData from "../hooks/useData";
+import dataStore from "../store/dataStore";
 
-const MainPage = () => {
-  const [pageNumber, setPageNumber] = useState(1);
+const MainPage = observer(() => {
+  // const { count, increment, decrement } = counterStore;
+  // const [pageNumber, setPageNumber] = useState(1);
 
-  const { results, isLoading, isError, error, hasNextPage } =
-    useData(pageNumber);
+  const [currElement, setCurrElement] = useState<any>({} as any);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const {
+    results,
+    isLoading,
+    isError,
+    error,
+    hasNextPage,
+    getPageAction,
+    incrementPage,
+    pageNumber,
+    deleteElement,
+  } = dataStore;
+
+  // useEffect(() => {
+  //   incrementPage();
+  // }, []);
+  // useEffect(() => incrementPage());
+
+  useEffect(() => {
+    getPageAction();
+  }, [pageNumber]);
 
   const intObserver = useRef<any>();
 
@@ -18,7 +59,8 @@ const MainPage = () => {
 
       intObserver.current = new IntersectionObserver((items) => {
         if (items[0].isIntersecting && hasNextPage) {
-          setPageNumber((prev) => prev + 1);
+          incrementPage();
+          // setPageNumber((prev) => prev + 1);
         }
       });
 
@@ -31,19 +73,46 @@ const MainPage = () => {
 
   const content = results.map((item, i) => {
     if (i + 1 === results.length) {
-      return <ListItem key={item.id} ref={lastItemRef} item={item} />;
+      return (
+        <ListItem
+          deleteElement={deleteElement}
+          handleOpenModal={showModal}
+          key={item.id}
+          ref={lastItemRef}
+          item={item}
+        />
+      );
     } else {
-      return <ListItem key={item.id} item={item} />;
+      return (
+        <ListItem
+          deleteElement={deleteElement}
+          handleOpenModal={showModal}
+          key={item.id}
+          item={item}
+        />
+      );
     }
   });
 
   return (
     <div>
+      <div style={{ position: "sticky", top: "0px", zIndex: 1000 }}>
+        {pageNumber}
+      </div>
+      <button onClick={() => incrementPage()}>-</button>
+      {/* <button onClick={() => decrement(1)}>-</button>
+      <span>{count}</span>
+      <button onClick={() => increment(1)}>+</button> */}
       Бесконечный скролл
       {content}
-      {isLoading && <p>Загрузка...</p>}
+      {isLoading && <Spin indicator={<LoadingOutlined spin />} />}
+      <Modal
+        open={isModalOpen}
+        onClose={handleClose}
+        onCancel={handleCancel}
+      ></Modal>
     </div>
   );
-};
+});
 
 export default MainPage;
