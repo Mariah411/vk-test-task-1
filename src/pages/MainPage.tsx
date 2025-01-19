@@ -4,19 +4,14 @@ import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useRef } from "react";
 import ListItem from "../components/ListItem";
 import EditForm from "../components/editForm";
+import useMessage from "../hooks/useMesage";
 import useModal from "../hooks/useModal";
 import dataStore from "../store/dataStore";
 import { IItem } from "../types";
 
 const MainPage = observer(() => {
-  const {
-    currElement,
-    isModalOpen,
-    handleEdit,
-    handleOk,
-    handleClose,
-    handleCancel,
-  } = useModal();
+  const { currElement, isModalOpen, handleEdit, handleOk, handleCancel } =
+    useModal();
 
   const {
     results,
@@ -32,9 +27,20 @@ const MainPage = observer(() => {
     isEditingError,
   } = dataStore;
 
-  const onSubmit = (data: IItem) => {
+  const { contextHolder, errorMessage, successMessage } = useMessage();
+
+  const submit = (data: IItem) => {
     editElement(data);
     handleOk();
+    if (isEditingError) {
+      errorMessage();
+    } else {
+      successMessage();
+    }
+  };
+
+  const cancel = () => {
+    handleCancel();
   };
 
   useEffect(() => {
@@ -87,21 +93,29 @@ const MainPage = observer(() => {
   });
 
   return (
-    <div>
+    <div style={{ margin: "0 auto", maxWidth: "900px", padding: 10 }}>
+      {contextHolder}
       {/* <div style={{ position: "sticky", top: "0px", zIndex: 1000 }}>
         {pageNumber}
       </div>
       Бесконечный скролл */}
       {content}
-      {isLoading && <Spin indicator={<LoadingOutlined spin />} />}
+      {isLoading && (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Spin indicator={<LoadingOutlined spin />} size="large" />{" "}
+        </div>
+      )}
       <Modal
+        title="Редактирование"
+        footer={null}
         open={isModalOpen}
-        onClose={handleClose}
-        onCancel={handleCancel}
-        onOk={handleOk}
+        closable={false}
+        // onClose={handleClose}
+        // onCancel={handleCancel}
+        // onOk={handleOk}
       >
         {/* {JSON.stringify(currElement)} */}
-        <EditForm currElement={currElement} submit={onSubmit} />
+        <EditForm currElement={currElement} submit={submit} cancel={cancel} />
       </Modal>
     </div>
   );

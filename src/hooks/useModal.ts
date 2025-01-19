@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IItem } from "../types";
 
-const useModal = (onOk?: any) => {
+const useModal = () => {
   const [currElement, setCurrElement] = useState<IItem>({} as IItem);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,11 +22,11 @@ const useModal = (onOk?: any) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    // setCurrElement({});
+    setCurrElement({} as IItem);
   };
   const handleClose = () => {
     setIsModalOpen(false);
-    // setCurrElement({});
+    setCurrElement({} as IItem);
   };
 
   return {

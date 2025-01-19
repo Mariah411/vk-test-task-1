@@ -1,4 +1,4 @@
-import { Card } from "antd";
+import { Button, Card } from "antd";
 import { forwardRef } from "react";
 import { IItem } from "../types";
 
@@ -12,11 +12,29 @@ const ListItem = forwardRef((props: Props, ref: React.ForwardedRef<any>) => {
   const { item, deleteElement, handleEdit } = props;
 
   const itemBody = (
-    <Card title={item.title} bordered={true} style={{ maxWidth: 900 }}>
+    <Card
+      title={item.title}
+      bordered={true}
+      style={{ maxWidth: 900, margin: 10 }}
+    >
       <p>{item.body}</p>
       <p>item id: {item.id}</p>
-      <button onClick={() => deleteElement(item.id)}>Удалить</button>
-      <button onClick={() => handleEdit({ ...item })}>Редактировать</button>
+
+      <Button
+        onClick={() => handleEdit({ ...item })}
+        color="primary"
+        variant="outlined"
+        style={{ marginRight: 10 }}
+      >
+        Редактировать
+      </Button>
+      <Button
+        onClick={() => deleteElement(item.id)}
+        color="danger"
+        variant="outlined"
+      >
+        Удалить
+      </Button>
     </Card>
     // <>
     //   <h2>{item.title}</h2>

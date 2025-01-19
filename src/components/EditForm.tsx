@@ -1,5 +1,6 @@
+import { Button, Form, FormProps, Input, Space } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { useEffect } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { IItem } from "../types";
 
 type Inputs = {
@@ -12,36 +13,85 @@ type Inputs = {
 type Props = {
   currElement: IItem;
   submit: any;
+  cancel: any;
 };
 
 const EditForm = (props: Props) => {
-  const { currElement, submit } = props;
+  const { currElement, submit, cancel } = props;
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<Inputs>({ defaultValues: {} as Inputs });
-  const onSubmit: SubmitHandler<Inputs> = (data) => submit(data);
+  const [form] = Form.useForm();
+
+  const onFinish: FormProps<Inputs>["onFinish"] = (values) => {
+    submit(values);
+  };
+
+  const onCancel = () => cancel();
+
+  const onFinishFailed: FormProps<Inputs>["onFinishFailed"] = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
 
   useEffect(() => {
-    reset(currElement);
-  }, [currElement, reset]);
+    form.setFieldsValue({ ...currElement });
+  }, [currElement]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("id")} disabled />
+    <Form
+      name="editForm"
+      form={form}
+      style={{ maxWidth: 600 }}
+      initialValues={currElement}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+    >
+      <Form.Item<Inputs> label="ID" name="id">
+        <Input disabled />
+      </Form.Item>
 
-      <input {...register("userId", { required: true })} />
+      <Form.Item<Inputs>
+        label="id пользователя"
+        name="userId"
+        rules={[
+          { required: true, message: "Это поле обязательно для заполнения" },
+        ]}
+      >
+        <Input />
+      </Form.Item>
 
-      <input {...register("title")} />
-      <input {...register("body")} />
-      {/* {errors.userId && <span>This field is required</span>} */}
+      <Form.Item<Inputs>
+        label="Заголовок"
+        name="title"
+        rules={[
+          { required: true, message: "Это поле обязательно для заполнения" },
+        ]}
+      >
+        <Input />
+      </Form.Item>
 
-      <input type="submit" />
-    </form>
+      <Form.Item<Inputs>
+        label="Текст поста"
+        name="body"
+        rules={[
+          { required: true, message: "Это поле обязательно для заполнения" },
+        ]}
+      >
+        <TextArea />
+      </Form.Item>
+
+      <Space>
+        <Form.Item label={null}>
+          <Button color="default" onClick={onCancel}>
+            Отмена
+          </Button>
+        </Form.Item>
+
+        <Form.Item label={null}>
+          <Button type="primary" htmlType="submit">
+            Сохранить
+          </Button>
+        </Form.Item>
+      </Space>
+    </Form>
   );
 };
 
