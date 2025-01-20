@@ -5,7 +5,7 @@
 
 Деплой проекта: https://mahaon-test-task-1.netlify.app/
 
-  ## Реализовано:
+  ### Реализовано:
   - Бесконечный плавный скролл, постепенная подгрузка элементов
   - Локальное редактирование и удаление элементов
   - Индикация загрузки данных
@@ -13,7 +13,7 @@
   
   Для разработки использовалось API JSONPlaceholder https://jsonplaceholder.typicode.com/posts
   
-  ## Используемые технологии
+  ### Используемые технологии
   - React, TypeScript
   - Vite
   - MobX
@@ -22,6 +22,8 @@
   - Axios
   - Jest, React Testing Library
   - PWA
-  
+
+  ### Запуск проекта
+  ```npm run dev```
 
 
