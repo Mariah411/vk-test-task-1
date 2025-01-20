@@ -1,5 +1,6 @@
 export interface IItem {
   id: number;
+  userId: number;
   title: string;
   body: string;
 }

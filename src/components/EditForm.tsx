@@ -1,14 +1,9 @@
-import { Button, Form, FormProps, Input, Space } from "antd";
+import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect } from "react";
 import { IItem } from "../types";
 
-type Inputs = {
-  id: number;
-  userId: number;
-  title: string;
-  body: string;
-};
+type Inputs = IItem;
 
 type Props = {
   currElement: IItem;
@@ -52,17 +47,24 @@ const EditForm = (props: Props) => {
         label="id пользователя"
         name="userId"
         rules={[
-          { required: true, message: "Это поле обязательно для заполнения" },
+          {
+            required: true,
+            message: "Это поле обязательно для заполнения",
+          },
         ]}
       >
-        <Input />
+        <InputNumber />
       </Form.Item>
 
       <Form.Item<Inputs>
         label="Заголовок"
         name="title"
         rules={[
-          { required: true, message: "Это поле обязательно для заполнения" },
+          {
+            required: true,
+            whitespace: true,
+            message: "Это поле обязательно для заполнения",
+          },
         ]}
       >
         <Input />
@@ -72,7 +74,11 @@ const EditForm = (props: Props) => {
         label="Текст поста"
         name="body"
         rules={[
-          { required: true, message: "Это поле обязательно для заполнения" },
+          {
+            required: true,
+            whitespace: true,
+            message: "Это поле обязательно для заполнения",
+          },
         ]}
       >
         <TextArea />

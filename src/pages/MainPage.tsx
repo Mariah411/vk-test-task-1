@@ -1,8 +1,8 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Modal, Spin } from "antd";
+import { Modal, Spin, Typography } from "antd";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useRef } from "react";
-import ListItem from "../components/ListItem";
+import ListItem from "../components/ListItem/ListItem";
 import EditForm from "../components/editForm";
 import useMessage from "../hooks/useMesage";
 import useModal from "../hooks/useModal";
@@ -95,10 +95,7 @@ const MainPage = observer(() => {
   return (
     <div style={{ margin: "0 auto", maxWidth: "900px", padding: 10 }}>
       {contextHolder}
-      {/* <div style={{ position: "sticky", top: "0px", zIndex: 1000 }}>
-        {pageNumber}
-      </div>
-      Бесконечный скролл */}
+      <Typography.Title level={1}>Список постов</Typography.Title>
       {content}
       {isLoading && (
         <div style={{ display: "flex", justifyContent: "center" }}>
@@ -106,15 +103,11 @@ const MainPage = observer(() => {
         </div>
       )}
       <Modal
-        title="Редактирование"
+        title="Редактирование поста"
         footer={null}
         open={isModalOpen}
         closable={false}
-        // onClose={handleClose}
-        // onCancel={handleCancel}
-        // onOk={handleOk}
       >
-        {/* {JSON.stringify(currElement)} */}
         <EditForm currElement={currElement} submit={submit} cancel={cancel} />
       </Modal>
     </div>
