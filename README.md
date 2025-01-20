@@ -23,7 +23,4 @@
   - Jest, React Testing Library
   - PWA
 
-  ### Запуск проекта
-  ```npm run dev```
-
 
