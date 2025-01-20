@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { getPage } from "../api";
+import { IItem } from "../types";
 type ErrType = { message: string };
 
 class DataStore {
@@ -59,7 +60,7 @@ class DataStore {
         this.setIsLoading(false);
         this.setHasNextPage(Boolean(data.length));
       });
-    } catch (e) {
+    } catch (e: any) {
       runInAction(() => {
         this.setIsLoading(false);
         if (signal.aborted) return;
