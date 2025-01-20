@@ -1,5 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Modal, Spin, Typography } from "antd";
+import Alert from "antd/es/alert/Alert";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useRef } from "react";
 import ListItem from "../components/ListItem/ListItem";
@@ -58,7 +59,6 @@ const MainPage = observer(() => {
       intObserver.current = new IntersectionObserver((items) => {
         if (items[0].isIntersecting && hasNextPage) {
           incrementPage();
-          // setPageNumber((prev) => prev + 1);
         }
       });
 
@@ -67,7 +67,8 @@ const MainPage = observer(() => {
     [isLoading, hasNextPage]
   );
 
-  if (isError) return <p>ОШИБКА: {error.message}</p>;
+  if (isError)
+    return <Alert type="error" message={`ОШИБКА: ${error.message}`}></Alert>;
 
   const content = results.map((item, i) => {
     if (i + 1 === results.length) {
