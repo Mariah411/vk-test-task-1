@@ -23,4 +23,5 @@
   - Jest, React Testing Library
   - PWA
 
-
+## *Задание 2*
+Реализация класса EventEmmitter (файл EventEmmiter.js)
